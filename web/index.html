@@ -7,8 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-    <title>Directory</title>
+    <title>Directory Search</title>
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -28,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Directory</a>
+          <a class="navbar-brand" href="#">Directory Search</a>
         </div>
       </div>
     </nav>
@@ -37,22 +36,24 @@
       <div class="jumbotron">
         <div class="form-inline">
           <div class="form-group">
-            <label for="district">District</label>
-            <input type="text" class="form-control" id="district" placeholder="District">
+            <label class="sr-only" for="district">District</label>
+            <input type="text" class="search_field form-control" name="district_name" placeholder="District">
           </div>
           <div class="form-group">
-            <label for="state">state</label>
-            <input type="text" class="form-control" id="state" placeholder="State">
+            <label class="sr-only" for="state">State</label>
+            <input type="text" class="search_field form-control" name="state" placeholder="State">
           </div>
           <div class="form-group">
-            <label for="pincode">Pincode</label>
-            <input type="text" class="form-control" id="pincode" placeholder="Pincode">
+            <label class="sr-only" for="pincode">Pincode</label>
+            <input type="text" class="search_field form-control" name="pincode" placeholder="Pincode">
           </div>
           <div class="form-group">
-            <label for="locality">Locality</label>
-            <input type="email" class="form-control" id="locality" placeholder="Locality">
+            <label class="sr-only" for="locality">Taluk</label>
+            <input type="text" class="search_field form-control" name="taluk" placeholder="Taluk">
           </div>
-          <button type="submit" class="btn btn-default" onclick=App.search_record();>Search</button>
+          <div class="form-group">
+            <button type="submit" class="btn btn-default" onclick=App.search_record();>Search</button>
+          </div>
         </div>
       </div>
       <div class="">
@@ -73,7 +74,7 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="10">No record.</td>
+              <td colspan="10"><center>No record.</center></td>
             </tr>
           </tbody>
         </table>

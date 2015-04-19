@@ -1,12 +1,13 @@
 var App = (function () {
 
     var BASE_URL = "/api/"
-
+    
+    //Would create response table
     var build_table = function (data) {
         $("table#search_table tbody").html("");
         
-        if (!data) {
-            $("table#search_table tbody").append("No Records found");
+        if (data.length == 0) {
+            $("table#search_table tbody").append('<tr><td colspan="10"><center>No Records found.</center></td></tr>');
         }
         
         $.each(data, function(index, value) {
@@ -26,31 +27,20 @@ var App = (function () {
         });
     };
 
+    //Search records 
     var search_record = function () {
-        var district = $("#district").val();
-        var state = $("#state").val();
-        var pincode = $("#pincode").val();
-        var locality = $("#locality").val();
         var request_data = {};
         
-        if (!district && !state && !pincode && !locality) {
+        $("input.search_field").each(function() {
+            var value = $(this).val();
+            
+            if (value) {
+                request_data[$(this).attr('name')] = value;
+            }
+        });
+        
+        if ($.isEmptyObject(request_data)) {
             return;
-        } else {
-            if (district) {
-                request_data["district"] = district
-            }
-            
-            if (state) {
-                request_data["state"] = state
-            }
-            
-            if (pincode) {
-                request_data["pincode"] = pincode
-            }
-            
-            if (locality) {
-                request_data["locality"] = locality
-            }
         }
         
         $.getJSON(BASE_URL, request_data, function(data) {
@@ -62,6 +52,4 @@ var App = (function () {
         "search_record": search_record
     };
 })(App);
-
-
 
