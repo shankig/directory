@@ -17,7 +17,6 @@ class AppCache(MemcachedCache):
         if not data:
             query = {"pincode": sub_key}
             data = Directory.objects.filter(**query)
-            print data
             self.set_data(key, list(data))
         return data
     
