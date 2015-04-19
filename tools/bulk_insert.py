@@ -1,13 +1,19 @@
+import sys
 import csv
 from pymongo import MongoClient
+
+try:
+    file_path = sys.argv[1]
+except:
+    print "Please specify file path"
 
 client = MongoClient('localhost', 27017)
 db = client['app_directory']
 directory = db.directory
-print directory.find_one()
+
 query_list = []
 
-with open('/home/shabi/Downloads/all_india_pin_code.csv') as csvfile:
+with open(file_path) as csvfile:
     reader = csv.DictReader(csvfile)
     
     for row in reader:
