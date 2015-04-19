@@ -1,7 +1,8 @@
 from flask.ext import restful
-from flask.ext.restful import reqparse
 from flask.ext.restful import fields, marshal_with, marshal
 from memcache import AppCache, Directory
+from parser import ParameterParser
+
 
 #field to be allowed
 resource_fields = {
@@ -17,45 +18,35 @@ resource_fields = {
     'state_name': fields.String 
 }
 
-#arg parser
-parser = reqparse.RequestParser()
-parser.add_argument('office_name', type=str, location=['form', 'args'])
-parser.add_argument('pincode', type=int, location=['form', 'args'])
-parser.add_argument('office_type', type=str, location=['form', 'args'])
-parser.add_argument('delivery_status', type=str, location=['form', 'args'])
-parser.add_argument('division_name', type=str, location=['form', 'args'])
-parser.add_argument('region_name', type=str, location=['form', 'args'])
-parser.add_argument('circle_name', type=str, location=['form', 'args'])
-parser.add_argument('taluk', type=str, location=['form', 'args'])
-parser.add_argument('district_name', type=str, location=['form', 'args'])
-parser.add_argument('state_name', type=str, location=['form', 'args'])
 
-
-class DirectoryResource(restful.Resource):
+class DirectoryResource(ParameterParser, restful.Resource):
     """
     Resource contains logic for GET and POST.
     """
     
     def get(self):
-        args = parser.parse_args()
+        args = self.parser.parse_args()
         input_args = DirectoryResource.prepare_query_dict(args)
-        print input_args
+        
         if input_args:
-            return marshal(list(Directory.objects.filter(**input_args)[:20]), resource_fields)
+            return marshal(
+                list(Directory.objects.filter(**input_args)[:20]),
+                resource_fields
+            )
         else:
             return marshal(list(Directory.objects.all()[:20]), resource_fields)
 
     marshal_with(resource_fields)
     def post(self):
-        args = parser.parse_args()
-        print args
+        args = self.parser.parse_args()
+        
         task = Directory.objects.create(**args)
-        print task
         return {"office_name": task.office_name}, 201
     
     @staticmethod
     def prepare_query_dict(args):
         input_arg = {}
+        
         for key, value in args.iteritems():
             if value is not None:
                 input_arg[key + "__icontains"] = value
@@ -63,7 +54,7 @@ class DirectoryResource(restful.Resource):
         return input_arg
 
 
-class DirectoryUpdateResource(restful.Resource):
+class DirectoryUpdateResource(ParameterParser, restful.Resource):
     """
     Resource contains logic for PUT and DELETE
     """
@@ -76,13 +67,15 @@ class DirectoryUpdateResource(restful.Resource):
         return marshal(list(data), resource_fields)
     
     def put(self, directory_key):
-        args = parser.parse_args()
+        args = self.parser.parse_args()
         input_arg = DirectoryUpdateResource.cleanup_none(args)
-        Directory.objects.update(write_concern={'pincode':directory_key}, **input_arg)
+        Directory.objects.update(
+            write_concern={'pincode':directory_key}, **input_arg
+        )
         return '', 201
     
     def delete(self, directory_key):
-        Directory.objects.delete(write_concern={'pincode':directory_key})
+        num_records = Directory.objects(pincode=directory_key).delete()
         return '', 204
     
     @staticmethod

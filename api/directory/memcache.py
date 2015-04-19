@@ -5,6 +5,7 @@ from models import Directory
 class AppCache(MemcachedCache):
     """
     Class to be used for memcached interaction.
+    Currently get request uses for pincode as key.
     """
     
     def __init__(self):
