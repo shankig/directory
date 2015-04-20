@@ -13,8 +13,8 @@ api = restful.Api(app)
 db = MongoEngine(app)
 
 #Api urls
-api.add_resource(DirectoryResource, '/')
-api.add_resource(DirectoryUpdateResource, '/<directory_key>') # directory_key is pincode
+api.add_resource(DirectoryResource, '/record/')
+api.add_resource(DirectoryUpdateResource, '/record/<directory_key>') # directory_key is pincode
 
 if __name__ == '__main__':
     app.run()

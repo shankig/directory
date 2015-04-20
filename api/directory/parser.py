@@ -1,12 +1,14 @@
 from flask.ext.restful import reqparse
+from flask.ext import restful
 
 
-class ParameterParser(object):
+class ParameterParser(restful.Resource):
     """
     Allowed parameter in request argument
     """
     
     def __init__(self):
+        restful.Resource.__init__(self)
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('office_name', type=str, location=['form', 'args'])
         self.parser.add_argument('pincode', type=int, location=['form', 'args'])

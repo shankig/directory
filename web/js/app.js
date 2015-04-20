@@ -1,6 +1,6 @@
 var App = (function () {
 
-    var BASE_URL = "/api/"
+    var BASE_URL = "/api/record/"
     
     //Would create response table
     var build_table = function (data) {
